@@ -93,7 +93,7 @@
 			function show(){
 				var ctx = document.getElementById("canvas").getContext("2d");
 				window.myBar = new Chart(ctx, {
-					type: 'horizontalBar',
+					type: 'bar',
 					data: barChartData,
 					options: {
 						title:{
@@ -110,7 +110,7 @@
 								display: true,
 								scaleLabel: {
 									display: true,
-									labelString: '公車類型'
+									labelString: '分布比率(%)'
 								}
 							}],
 							xAxes: [{
@@ -118,7 +118,7 @@
 								display: true,
 								scaleLabel: {
 									display: true,
-									labelString: '分布比率'
+									labelString: '公車類型'
 								}
 							}]
 						}
