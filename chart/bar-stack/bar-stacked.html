@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Stacked Bar Chart</title>
+	<meta charset="utf-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/Chart.bundle.js"></script>
+    <style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div style="width: 60%">
+        <canvas id="canvas" ></canvas>
+    </div>
+	<button id="showpic" onclick="show()">Start</button>
+    <script>
+		var allText =[];
+		var barChartData;
+		function readTextFile(file,callback)
+		{
+			var rawFile = new XMLHttpRequest();
+			rawFile.open("GET", file, true);
+			rawFile.onreadystatechange = function ()
+			{
+				if(rawFile.readyState === 4)
+				{
+					if(rawFile.status === 200 || rawFile.status == 0)
+					{
+						allText = rawFile.responseText.split(/\r\n|\n/);	
+						//alert(allText.length);					
+						return  callback(null,allText);
+					}
+				}
+			}
+			rawFile.send(null);
+		}
+        
+		allText = readTextFile("output.csv",function(err,result){
+			var randomScalingFactor = function() {
+				return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+			};
+			var randomColorFactor = function() {
+				return Math.round(Math.random() * 255);
+			};
+			
+			var Textlen = allText.length-1;
+			var bus =[];
+			var DATAS =new Array();
+			for(var i=1;i<Textlen;i++){
+				DATAS[i-1] =new Array();
+			}
+			for(var j=1;j<=allText[0].split(",").length-1;j++){	
+				bus.push(allText[0].split(",")[j]);				
+			}
+			
+			
+			for(var i=1;i<Textlen;i++){
+				for(var j=1;j<=allText[i].split(",").length-1;j++){	
+					DATAS[i-1].push(allText[i].split(",")[j]);					
+				}				
+			}
+			//alert(DATAS[3][2]);
+			
+			barChartData = {
+				labels: bus,
+				datasets: [{
+					label: allText[1].split(",")[0],
+					backgroundColor: 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)',
+					data: DATAS[0]
+				}, {
+					label: allText[2].split(",")[0],
+					backgroundColor: 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)',
+					data: DATAS[1]
+				}, {
+					label: allText[3].split(",")[0],
+					backgroundColor: 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)',
+					data: DATAS[2]
+				}, {
+					label: allText[4].split(",")[0],
+					backgroundColor: 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)',
+					data: DATAS[3]
+				}]
+
+			};
+		});
+			function show(){
+				var ctx = document.getElementById("canvas").getContext("2d");
+				window.myBar = new Chart(ctx, {
+					type: 'horizontalBar',
+					data: barChartData,
+					options: {
+						title:{
+							display:true,
+							text:"Chart.js Bar Chart - Stacked"
+						},
+						tooltips: {
+							mode: 'label'
+						},
+						responsive: true,
+						scales: {
+							yAxes: [{
+								stacked: true,
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '公車類型'
+								}
+							}],
+							xAxes: [{
+								stacked: true,
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '分布比率'
+								}
+							}]
+						}
+					}
+				});
+			}
+		
+    </script>
+</body>
+
+</html>
