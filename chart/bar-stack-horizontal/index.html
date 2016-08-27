@@ -89,10 +89,8 @@
 				}]
 
 			};
-		});
-			function show(){
-				var ctx = document.getElementById("canvas").getContext("2d");
-				window.myBar = new Chart(ctx, {
+			var ctx = document.getElementById("canvas").getContext("2d");
+				var myBar = new Chart(ctx, {
 					type: 'horizontalBar',
 					data: barChartData,
 					options: {
@@ -124,6 +122,44 @@
 						}
 					}
 				});
+				myBar.update();
+			
+		});
+			function show(){
+				var ctx = document.getElementById("canvas").getContext("2d");
+				var myBar = new Chart(ctx, {
+					type: 'horizontalBar',
+					data: barChartData,
+					options: {
+						title:{
+							display:true,
+							text:"Chart.js Bar Chart - Stacked"
+						},
+						tooltips: {
+							mode: 'label'
+						},
+						responsive: true,
+						scales: {
+							yAxes: [{
+								stacked: true,
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '公車類型'
+								}
+							}],
+							xAxes: [{
+								stacked: true,
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: '分布比率(%)'
+								}
+							}]
+						}
+					}
+				});
+				myBar.update();
 			}
 		
     </script>
